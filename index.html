@@ -19,6 +19,7 @@ Your browser does not support the audio element.
 
 <script>
 ///Displays the current BPM
+
 var metronomeTick = new Audio('metronome_tick.mp3');
 
 function outputUpdate(bpm) {
@@ -29,9 +30,9 @@ function generateBeatsPerSecond (x) {
 	return x / 60 * 1000
 }
 
-var bpmMilliseconds = generateBeatsPerSecond(document.querySelector('#bpm').value);
+/// var bpmMilliseconds = generateBeatsPerSecond(document.querySelector('#bpm').value);
 
-/// setInterval(metronomeTick.play();, bpmMilliseconds)
+setInterval(metronomeTick.play(), 1000)
 
 </script>
 
