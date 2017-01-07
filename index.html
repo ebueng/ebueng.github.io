@@ -2,30 +2,63 @@
 <html>
 <body>
 <h1>Metronome</h1>
-<p>I'm hosted with GitHub Pages.</p>
 
 <label for="bpmSlider">BPM</label>
 
 <!-- Slider --> 
-<input id="bpmSlider" type="range" min="40" max="218" step="1" value="120" oninput="outputUpdate(value)" />
 
+<input id="bpmSlider" type="range" min="40" max="218" step="1" value="120" oninput="outputUpdate(value), adjustBPM()" />
 <output for="bpmSlider" id="bpm">120</output>
-
+<input id="onOffButton" type="button" value="Off" onclick="switchState(), changeButton()"/>
 
 <script>
-var metronomeTick = new Audio('metronome_tick.mp3');
+var state = false;
+var metronomeInterval = setInterval(outputTick, 1000)
 
-function outputUpdate(bpm) {
-	document.querySelector('#bpm').value = bpm;
+
+///Turn Metronome on or off
+function switchState() {
+	if (state == false) {
+		state = true;
+		return adjustBPM()
+	} 
+	else {
+		///Turn off the metronome
+		clearInterval(metronomeInterval);
+		state = false;
+	}
 }
 
-function generateBeatsPerSecond (x) {
-	return x / 60 * 1000
+function changeButton() // no ';' here
+{
+    var elem = document.getElementById("onOffButton");
+    if (elem.value=="Off") elem.value = "On";
+    else elem.value = "Off";
 }
 
-///var bpmMilliseconds = generateBeatsPerSecond(document.querySelector('#bpm').value);
+function outputUpdate(val) {
+	document.querySelector('#bpm').value = val;
+}
 
-setInterval(metronomeTick.play(), 1000)
+function generateBeatsPerSecond(x) {
+	return 60 / x * 1000
+}
+
+function outputTick() {
+	var metronomeTick = new Audio('metronome_tick.mp3');
+	metronomeTick.play()
+}
+
+function adjustBPM() {
+	if (state == true) {
+		var bpmVal = generateBeatsPerSecond(document.querySelector('#bpm').value);
+		clearInterval(metronomeInterval);
+		console.log(bpmVal)
+		metronomeInterval = setInterval(outputTick,bpmVal);
+	} else {
+		console.log("turn me on!")
+	}
+}
 
 </script>
 
